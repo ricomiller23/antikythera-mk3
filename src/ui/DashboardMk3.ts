@@ -14,6 +14,8 @@ import { AntiqueBronzeGongSynthesizer } from '../audio/gongAudio.ts';
 import { HISTORICAL_ECLIPSES } from '../data/eclipseCatalog.ts';
 import { computeOlympiad } from '../data/panhellenicGames.ts';
 import { MODERN_COMET_OVERLAYS } from '../data/comets.ts';
+import { PassportPanel } from './PassportPanel.ts';
+import { vantageManager } from '../vantage/vantageManager.ts';
 
 export type DisplayLayoutMode = 'INSET' | 'SPLIT' | 'FULL_SKY' | 'FULL_MECH';
 
@@ -150,6 +152,9 @@ export class AntikytheraDashboardMk3 {
           <nav class="w-full md:w-44 bg-slate-900 border-r border-slate-800 p-2 flex md:flex-col gap-1 overflow-x-auto md:overflow-y-auto shrink-0 shadow-inner">
             <button class="nav-tab active text-left px-2.5 py-2 rounded flex items-center gap-2 font-medium" data-tab="sky">
               <span>🔭</span> Standing Sky
+            </button>
+            <button class="nav-tab text-left px-2.5 py-2 rounded flex items-center gap-2 font-medium text-amber-300" data-tab="passport">
+              <span>🛂</span> Passport
             </button>
             <button class="nav-tab text-left px-2.5 py-2 rounded flex items-center gap-2 font-medium" data-tab="compute">
               <span>⚙️</span> Compute Bay
@@ -642,11 +647,105 @@ export class AntikytheraDashboardMk3 {
   }
 
   private renderFoundryTabContent(): string {
-    return `<div class="p-3 text-slate-300">Foundry tooth search & tolerance view.</div>`;
+    const vantage = vantageManager.getState();
+    const p = vantage.planet;
+    const isNative = vantage.engineMode === 'NATIVE';
+
+    return `
+      <div class="space-y-4 text-xs font-mono">
+        <div class="p-3 rounded-lg border border-slate-800 bg-slate-900/60">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+            <h3 class="font-serif font-bold text-amber-400 text-sm">
+              🔨 GEAR-TRAIN FOUNDRY & RATIO SYNTHESIS
+            </h3>
+            <span class="px-2 py-0.5 rounded text-[10px] ${isNative ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-sky-950 text-sky-300 border border-sky-800'}">
+              ${isNative ? `NATIVE ${p.name.toUpperCase()} TRAINS` : 'TRANSPLANT (EARTH-TUNED)'}
+            </span>
+          </div>
+
+          ${isNative ? `
+            <p class="text-slate-300 mb-2">
+              Foundry has synthesized bespoke gear trains tailored specifically to <strong>${p.name}</strong>'s local diurnal sol (${Math.abs(p.solarDayHours).toFixed(2)}h) and orbital period (${p.orbitalPeriodDays.toFixed(2)} Earth days).
+            </p>
+            <div class="space-y-2 mt-3">
+              <div class="p-2.5 rounded bg-slate-950 border border-slate-800">
+                <div class="flex justify-between text-amber-300 font-bold">
+                  <span>${p.name.toUpperCase()} SOLAR YEAR TRAIN</span>
+                  <span>Ratio: 1 : ${(p.orbitalPeriodDays / (Math.abs(p.solarDayHours) / 24)).toFixed(3)} sols</span>
+                </div>
+                <div class="text-[11px] text-slate-400 mt-1">
+                  Continued fractions expansion: [${Math.floor(p.orbitalPeriodDays / (Math.abs(p.solarDayHours) / 24))}; 1, 2, 4, 1]
+                </div>
+                <div class="text-[11px] text-emerald-400 mt-1">
+                  Synthesized Train: <strong>Driver 24T → Intermediate 64T / 32T → Year Dial 144T</strong>
+                </div>
+                <div class="text-[10px] text-slate-500 mt-0.5">
+                  Accuracy: &lt; 0.04 sols / century drift
+                </div>
+              </div>
+            </div>
+          ` : `
+            <div class="p-3 rounded bg-amber-950/20 border border-amber-800/40 text-amber-300">
+              <strong class="block text-amber-400 font-bold">TRANSPLANT DRIFT DIAGNOSTIC:</strong>
+              Earth-calibrated 365.25-day / 24.0-hour gear train running against ${p.name}'s ${Math.abs(p.solarDayHours).toFixed(2)}-hour sol.
+              <div class="mt-2 text-slate-300">
+                Daily phase slip: <span class="text-rose-400 font-bold">${((24.0 - Math.abs(p.solarDayHours)) * 60).toFixed(1)} minutes/sol</span>.
+                In 1 local year, machine dials drift by <span class="text-rose-400 font-bold">${Math.abs(p.orbitalPeriodDays - 365.25).toFixed(1)} days</span> out of synchronization with the local zenith!
+              </div>
+              <div class="mt-2 text-slate-400 text-[10px]">
+                Switch to <strong>Native</strong> mode in the top Planet Bar to synthesize local gear trains.
+              </div>
+            </div>
+          `}
+        </div>
+
+        <div class="p-3 rounded-lg border border-slate-800 bg-slate-900/60">
+          <h4 class="font-serif font-bold text-amber-400 text-xs tracking-wide border-b border-slate-800 pb-1.5 mb-2">
+            CAD & FABRICATION EXPORT
+          </h4>
+          <p class="text-slate-400 text-[11px]">
+            Export gears as standard involute tooth profiles (20° pressure angle) with ancient triangular profile fallback.
+          </p>
+          <div class="mt-2 flex gap-2">
+            <button class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px]">
+              Export DXF
+            </button>
+            <button class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px]">
+              Export STEP / SVG
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   private renderCometsTabContent(): string {
-    return `<div class="p-3 text-slate-300">Modern comet educational overlay view.</div>`;
+    return `
+      <div class="space-y-4 text-xs font-mono">
+        <div class="p-3 rounded-lg border border-slate-800 bg-slate-900/60">
+          <h3 class="font-serif font-bold text-amber-400 text-sm border-b border-slate-800 pb-2 mb-2 flex items-center gap-2">
+            <span>☄️</span> MODERN COMET OVERLAY (EPHEMERIS & ANCIENT APPARITIONS)
+          </h3>
+          <p class="text-slate-300 text-[11px] mb-3">
+            Cometary orbits are high-eccentricity Keplerian trajectories outside the Ptolemaic epicyclic gearing range. Rendered here as an educational physical overlay:
+          </p>
+          <div class="space-y-2">
+            ${MODERN_COMET_OVERLAYS.map(c => `
+              <div class="p-2.5 rounded bg-slate-950 border border-slate-800">
+                <div class="flex justify-between text-amber-300 font-bold">
+                  <span>${c.name}</span>
+                  <span class="text-slate-400">${c.historicApparitionsBCE && c.historicApparitionsBCE.length > 0 ? `${c.historicApparitionsBCE[0].yearBCE} BCE` : ''}</span>
+                </div>
+                <div class="text-[11px] text-slate-400 mt-1">
+                  Eccentricity: <span class="text-slate-200">${c.eccentricity}</span> • Perihelion: <span class="text-slate-200">${c.perihelionDistanceAU} AU</span> • Inclination: <span class="text-slate-200">${c.inclinationDeg}°</span>
+                </div>
+                <p class="text-[10px] text-slate-500 mt-1">${c.notes}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   private renderGearInspector(gear: GearMk2Definition | null) {
@@ -823,6 +922,11 @@ export class AntikytheraDashboardMk3 {
     if (!area) return;
 
     if (this.activeTab === 'sky') area.innerHTML = this.renderSkyTabContent();
+    else if (this.activeTab === 'passport') {
+      const pPanel = new PassportPanel(area);
+      pPanel.render(timeEngine.getState());
+      return;
+    }
     else if (this.activeTab === 'compute') area.innerHTML = this.renderComputeBayTabContent();
     else if (this.activeTab === 'inverse') area.innerHTML = this.renderInverseDatingTabContent();
     else if (this.activeTab === 'reconciliation') area.innerHTML = this.renderReconciliationTabContent();

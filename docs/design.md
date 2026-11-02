@@ -121,3 +121,52 @@ Antikythera Mk III ("The Engine") is a speculative, physically-simulated success
 - **Right ~40% Area**: Scrollable tabbed control suite (Machine Transport, Sky Window Controls, Astronomical Lab, Compute Bay, Inverse Dating, Reconciliation, Life of Object, Foundry, Fabrication, Modern Comets, Provenance).
 
 *(Proceeding to Milestone Implementation)*
+
+# PLANET MODE SYSTEM DESIGN: VANTAGE ABSTRACTION & PLANETARY COMPUTATION
+
+## 1. Vantage Abstraction Interface
+All ephemeris, sky, time, calendar, and mechanical kinematic computations are routed through an immutable `Vantage` object:
+```typescript
+export interface Vantage {
+  bodyId: 'mercury' | 'venus' | 'earth' | 'mars' | 'jupiter' | 'saturn' | 'uranus' | 'neptune' | 'pluto';
+  site: {
+    name: string;
+    latitudeDeg: number;
+    longitudeDeg: number;
+    elevationMeters: number;
+    isPlanetocentric: boolean;
+    isEastLongitude: boolean;
+  };
+  timeScale: 'local_solar' | 'utc_equivalent' | 'tt_ephemeris';
+  frameDefinition: 'iau_body_fixed' | 'inertial_j2000' | 'rotating_synodic';
+  engineMode: 'TRANSPLANT' | 'NATIVE';
+}
+```
+
+## 2. Transplant vs. Native Mode Gearing
+- **TRANSPLANT Mode (Default & Fun):**
+  - Keeps the Hellenistic Earth-tuned tooth counts ($b_1 = 48\text{T}$, Metonic $254/19$, Saros $223$ months, solar year $365.25$ days).
+  - Drives the input crank by the local body's solar day (sol).
+  - The Ghost Overlay plots the physical pointers against the local sky, showing dramatic accumulated drift (e.g. on Mars, Earth dials lose 1 sol every ~36.5 sols; on Venus, day and year drift completely out of sync).
+- **NATIVE Mode (Speculative-New Engineering):**
+  - The Gear Train Foundry re-derives optimal gear ratios from the world's actual physical cycles:
+    - Mars: Local Year $668.5991$ sols. Foundry synthesizes ratio $669/1$ or $2006/3$ using minimal tooth counts ($48/24 \times 73/15$ modified), Phobos synodic ratio $7.6538\text{h} / 24.6598\text{h} = 0.31038 \approx 31/100$, Deimos ratio $30.31\text{h} / 24.66\text{h} = 1.2291 \approx 43/35$.
+    - Mercury: Spin-orbit 3:2 gear pair ($60\text{T} : 40\text{T}$ or $72\text{T} : 48\text{T}$) replacing Moon train.
+    - Venus: Earth-Venus synodic resonance ($5\text{T} : 8\text{T}$ or $75\text{T} : 120\text{T}$) replacing Moon train.
+    - Jupiter: Laplace resonance 4:2:1 compound differential stack ($64\text{T} : 32\text{T} : 16\text{T}$).
+
+## 3. Real Local Physics & Rendering
+- **Local Skies**:
+  - Mars: Butterscotch daytime sky (`#c99a6b`), blue sunset halo (`#38bdf8`), Phobos moving westward across the sky at $0.088^\circ/\text{min}$, Deimos moving eastward at $0.007^\circ/\text{min}$.
+  - Venus: Dense yellowish-white opaque cloud canopy (`#e6c88b`), with an interactive "Cloud-Pierce" toggle to view the stars and the Sun rising in the West.
+  - Mercury: Pitch-black sky (`#000000`), brilliant solar disc ($2.3\times$ larger than Earth's), zero twilight, apparent retrograde loop of the Sun near perihelion.
+  - Gas Giants: Standing at 1-bar cloud level with ring arch rendering on Saturn and 97.8° extreme seasonal path on Uranus.
+  - Pluto: Charon locked at fixed altitude and azimuth from near-side landmarks (e.g. Sputnik Planitia), never setting.
+
+## 4. Passport & Fun Layer Architecture
+- **Passport**:
+  - Weight conversion: $W_{\text{local}} = W_{\text{earth}} \times (g_{\text{local}} / 9.807)$.
+  - Age conversion: $\text{Age}_{\text{local}} = \text{Age}_{\text{earth}} \times (365.25 / P_{\text{orb}})$.
+  - Local calendar date (e.g. Mars Sol Date MSD, Darian Sol, Jovian System III revolution).
+  - Light level vs Earth noon: $I = 1 / d_{\text{AU}}^2$.
+  - "Find Earth" HUD indicator: calculates Earth-target vector in local horizontal coordinates, apparent magnitude, phase, and 1-way light-time delay $t = d / c$.

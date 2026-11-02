@@ -115,3 +115,60 @@ Bronze artifacts submerged for two millennia in deep seawater undergo electroche
    - Modeled dynamically in the **Life of the Object** time-lapse.
 
 *(Proceeding to Phase 2: System Architecture & Design Specification)*
+
+# PLANET MODE RESEARCH: IAU WGCCRE, ORBITAL CYCLES, SATELLITES & PHYSICAL PARAMETERS
+
+## 1. Body Orientation & Rotation (IAU WGCCRE Archinal et al. 2018 / 2020)
+- **Mercury**: 3:2 spin-orbit resonance. Sidereal rotation period $P_{\text{sid}} = 58.6462$ days. Solar day $P_{\text{sol}} = 175.9421$ days (exactly 3 rotations per 2 orbits). Obliquity $\approx 0.034^\circ$. Near perihelion, orbital angular velocity exceeds rotation velocity, producing an apparent retrograde loop of the Sun in Mercury's sky.
+- **Venus**: Retrograde axial rotation. Sidereal period $P_{\text{sid}} = -243.0226$ days. Orbital period $P_{\text{orb}} = 224.701$ days. Solar day $P_{\text{sol}} = 116.75$ Earth days. The Sun rises in the West and sets in the East. Obliquity $177.36^\circ$ ($2.64^\circ$ to orbit plane). Near 5:8 Earth-Venus resonance (synodic period 583.92 days).
+- **Earth**: $P_{\text{sid}} = 23.9344696$ hours ($0.9972696$ days). Solar day $24.0$ hours. Obliquity $23.44^\circ$. Precession cycle $25,772$ years.
+- **Mars**: $P_{\text{sid}} = 24.622962$ hours ($1.025957$ days). Solar sol $P_{\text{sol}} = 24.65979$ hours ($88775.244$ seconds, or $1.027491$ Earth days). Orbital period $686.98$ Earth days ($668.5991$ sols). Obliquity $25.19^\circ$. Mars24 time conventions (Allison & McEwen 2000): Mars Sol Date (MSD), Coordinated Mars Time (MTC), Local Mean Solar Time (LMST), Local True Solar Time (LTST).
+- **Jupiter**: System III magnetic rotation period $P_{\text{sid}} = 9.9250$ hours ($0.41354$ days). Solar day $9.9259$ hours. Orbital period $11.862$ Earth years ($4332.59$ days, $\approx 10475$ jovian days). Obliquity $3.13^\circ$.
+- **Saturn**: Internal rotation period $P_{\text{sid}} = 10.556$ hours ($10\text{h } 33\text{m } 38\text{s}$, Mankovich et al. 2019 ring seismology; Voyager radio period was $10\text{h } 39\text{m } 24\text{s}$, noted as disputed in UI). Obliquity $26.73^\circ$. Orbital period $29.457$ Earth years ($10759.22$ days). Ring plane crossings occur every $\approx 14.7$ Earth years.
+- **Uranus**: Retrograde spin with extreme obliquity $97.77^\circ$. Sidereal period $P_{\text{sid}} = -17.24$ hours ($0.71833$ days). Solar day $\approx 17.24$ hours, but polar seasons last 42 Earth years of continuous daylight / night. Orbital period $84.02$ Earth years.
+- **Neptune**: Sidereal period $P_{\text{sid}} = 16.11$ hours ($0.6713$ days). Obliquity $28.32^\circ$. Orbital period $164.79$ Earth years (completed first full orbit since discovery in 2011).
+- **Pluto**: Dwarf planet (IAU 2006). Tidally locked to Charon in 1:1 mutual synchronous rotation. $P_{\text{sid}} = -6.3872$ days (retrograde). Orbital period $248.00$ Earth years. Obliquity $122.53^\circ$. Charon appears motionless in the sky at coordinates directly above Sputnik Planitia ($19.5^\circ\text{N}, 175.8^\circ\text{E}$), and is perpetually invisible from the far-side hemisphere.
+
+## 2. Satellite Theories & Local Ephemerides
+- **Mars Moons**:
+  - Phobos: Semi-major axis $9376$ km, orbital period $7.6538$ hours ($0.3189$ days). Moves faster than Mars rotates ($7.65\text{h} < 24.66\text{h}$); rises in the West, transits across the sky in $\approx 4.2$ hours, and sets in the East, occurring $2\times$ to $3\times$ per sol. Frequently eclipses / transits the Sun as seen from Mars rovers (Jezero, Gale).
+  - Deimos: Semi-major axis $23463$ km, orbital period $30.31$ hours. Rises in the East, moves slowly, takes $\approx 2.7$ sols between rising and setting.
+- **Jupiter Galilean Moons (Lieske E5 Theory)**:
+  - Io: $P = 1.769$ days. In 4:2:1 Laplace resonance with Europa ($P = 3.551$ days) and Ganymede ($P = 7.155$ days). Callisto: $P = 16.689$ days. Frequent mutual eclipses and shadow transits on Jupiter's cloud tops. Rømer light-time delay ($\approx 1000$ seconds variation).
+- **Saturn Moons**:
+  - Titan: $P = 15.945$ days. Rhea: $P = 4.518$ days. Enceladus: $P = 1.370$ days. Mimas: $P = 0.942$ days. Ring arch spans the sky with dynamic shadows cast on the atmosphere.
+- **Uranus Moons**:
+  - Miranda ($1.413$d), Ariel ($2.520$d), Umbriel ($4.144$d), Titania ($8.706$d), Oberon ($13.463$d).
+- **Neptune Moons**:
+  - Triton: Retrograde inclined orbit ($P = 5.877$ days, inclination $156.8^\circ$). Nereid ($P = 360.1$ days, eccentric).
+- **Pluto Moons**:
+  - Charon: $P = 6.3872$ days, exactly equal to Pluto's rotation. Mutual transit / eclipse seasons occur every 124 years.
+
+## 3. Atmospheric Photometry, Gravity & Fluid Drive Viability
+- **Surface Gravity ($g$)**:
+  - Mercury: $3.70\,\text{m/s}^2$ ($0.38\,g$).
+  - Venus: $8.87\,\text{m/s}^2$ ($0.90\,g$).
+  - Earth: $9.807\,\text{m/s}^2$ ($1.00\,g$).
+  - Mars: $3.72\,\text{m/s}^2$ ($0.38\,g$).
+  - Jupiter (1-bar): $24.79\,\text{m/s}^2$ ($2.53\,g$).
+  - Saturn (1-bar): $10.44\,\text{m/s}^2$ ($1.06\,g$).
+  - Uranus (1-bar): $8.69\,\text{m/s}^2$ ($0.89\,g$).
+  - Neptune (1-bar): $11.15\,\text{m/s}^2$ ($1.14\,g$).
+  - Pluto: $0.62\,\text{m/s}^2$ ($0.063\,g$).
+- **Atmospheric Pressure & Temperature**:
+  - Mercury: Exosphere $\sim 10^{-14}$ bar. Day $+430^\circ\text{C}$, Night $-180^\circ\text{C}$. Water clock drive immediately vaporizes in sunlight and freezes in darkness. Acoustic gong is silent (vacuum).
+  - Venus: $92$ bar, $+465^\circ\text{C}$, $96.5\%\,\text{CO}_2$. Water clock immediately superheats and boils. Speed of sound $\approx 410\,\text{m/s}$, high acoustic damping.
+  - Mars: $6.1$ mbar ($0.006$ bar), $-60^\circ\text{C}$ average (range $-125^\circ\text{C}$ to $+20^\circ\text{C}$). Water sublimes/freezes at low pressure; pure water drive freezes or boils below triple point. Speed of sound $\approx 240\,\text{m/s}$.
+  - Gas Giants (1-bar level): $T \approx -110^\circ\text{C}$ (Jupiter), $-140^\circ\text{C}$ (Saturn), $-195^\circ\text{C}$ (Uranus), $-200^\circ\text{C}$ (Neptune). Water freezes solid; liquid methane / ammonia required.
+  - Pluto: $\sim 10\,\mu\text{bar}$, $-230^\circ\text{C}$. Near-vacuum; gong rings silently in realistic acoustics mode.
+
+## 4. Attested Greek Planet Names & Inscriptions
+- **Mercury**: Ἑρμῆς (Hermes) / Στίλβων (Stilbon - "The Gleaming One").
+- **Venus**: Ἀφροδίτη (Aphrodite) / Ἑωσφόρος (Phosphoros / Morning Star) / Ἕσπερος (Hesperos / Evening Star).
+- **Earth**: Γῆ (Ge / Gaia).
+- **Mars**: Ἄρης (Ares) / Πυρόεις (Pyroeis - "The Fiery One").
+- **Jupiter**: Ζεύς (Zeus) / Φαέθων (Phaethon - "The Radiant One").
+- **Saturn**: Κρόνος (Kronos) / Φαίνων (Phainon - "The Shiner").
+- **Uranus**: Modern naming (Οὐρανός adopted 1850; marked NOT ANCIENT).
+- **Neptune**: Modern naming (Ποσειδῶν adopted 1846; marked NOT ANCIENT).
+- **Pluto**: Modern naming (Πλούτων adopted 1930; marked NOT ANCIENT / DWARF PLANET IAU 2006).

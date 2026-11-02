@@ -7,15 +7,22 @@ import { AntikytheraDashboardMk3 } from './ui/DashboardMk3.ts';
 import { timeEngine } from './time/timeEngine.ts';
 import { siteManager } from './site/siteManager.ts';
 import { HighPrecisionSkyEngine } from './sky/skyEngine.ts';
+import { PlanetBar } from './ui/PlanetBar.ts';
 
 window.addEventListener('DOMContentLoaded', () => {
   const mechViewport = document.getElementById('viewport-mechanism') as HTMLElement;
   const skyViewport = document.getElementById('viewport-sky') as HTMLElement;
   const dashboardContainer = document.getElementById('dashboard-container') as HTMLElement;
+  const planetBarContainer = document.getElementById('planet-bar-container') as HTMLElement;
 
   if (!mechViewport || !skyViewport || !dashboardContainer) {
     console.error('Core container DOM elements missing');
     return;
+  }
+
+  // 0. Initialize Planet Bar
+  if (planetBarContainer) {
+    new PlanetBar(planetBarContainer);
   }
 
   // 1. Initialize Kinematics Engine
@@ -23,6 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // 2. Initialize 3D Scene (Mechanism)
   const scene = new AntikytheraSceneMk3(mechViewport, kinematics);
+  (window as any).__scene = scene;
 
   // 3. Initialize Sky Window
   const skyWindow = new SkyWindow(skyViewport);

@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 async function run() {
-  console.log('Starting Antikythera Mk III automated browser audit & screenshot suite...');
+  console.log('Starting Antikythera Mk III & Planet Mode automated browser audit suite...');
   const browser = await chromium.launch({
     executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     args: ['--enable-webgl', '--use-gl=angle', '--ignore-gpu-blocklist', '--no-sandbox']
@@ -39,91 +39,108 @@ async function run() {
   await page.goto('http://localhost:5175', { waitUntil: 'networkidle' });
   await page.waitForTimeout(2000);
 
-  // Screenshot 1: Standing Sky Window (Default view with Inset & 3D mechanism)
-  const shotSky = await page.screenshot();
-  saveShot(shotSky, 'antikythera_mk3_standing_sky');
+  // Click Center & Fit to ensure perfect volumetric centering
+  console.log('Actuating Center & Fit button...');
+  const fitBtn = await page.$('#btn-fit-frame');
+  if (fitBtn) await fitBtn.click();
+  await page.waitForTimeout(1000);
 
-  // Test layout switch to SPLIT
-  console.log('Testing Layout Switch: SPLIT 50/50...');
-  const layoutSelect = await page.$('#layout-selector');
-  if (layoutSelect) {
-    await layoutSelect.selectOption('SPLIT');
+  // Screenshot 1: Standing Sky Window (Default Earth baseline view)
+  const shotBaseline = await page.screenshot();
+  saveShot(shotBaseline, 'antikythera_mk3_standing_sky');
+
+  // 2. Switch to Mars (Ares) - Planet Mode Test
+  console.log('Testing Planet Mode: Switch to Mars (Ares)...');
+  const marsBtn = await page.$('button[data-planet="mars"]');
+  if (marsBtn) {
+    await marsBtn.click();
+    await page.waitForTimeout(1200);
+    const shotMars = await page.screenshot();
+    saveShot(shotMars, 'antikythera_mk3_planet_mars');
+  }
+
+  // 3. Test Passport Tab on Mars
+  console.log('Testing Interplanetary Passport Tab on Mars...');
+  const passportTab = await page.$('button[data-tab="passport"]');
+  if (passportTab) {
+    await passportTab.click();
     await page.waitForTimeout(1000);
-    const shotSplit = await page.screenshot();
-    saveShot(shotSplit, 'antikythera_mk3_split_screen');
+
+    // Verify weight calculation
+    const weightVal = await page.$eval('#val-passport-weight', el => el.textContent);
+    console.log(`Passport calculated Mars weight for 70kg: ${weightVal} kg`);
+
+    const shotPassport = await page.screenshot();
+    saveShot(shotPassport, 'antikythera_mk3_passport_panel');
   }
 
-  // Test Precession Pole view toggle
-  console.log('Testing Precession Pole View...');
-  const poleCheck = await page.$('#check-precession-pole');
-  if (poleCheck) {
-    await poleCheck.check();
+  // 4. Test Native Engine Mode Switch in Planet Bar & Foundry Tab
+  console.log('Testing Native Engine Mode & Foundry Derivations...');
+  const btnNative = await page.$('#btn-engine-native');
+  if (btnNative) {
+    await btnNative.click();
+    await page.waitForTimeout(600);
+  }
+
+  const foundryTab = await page.$('button[data-tab="foundry"]');
+  if (foundryTab) {
+    await foundryTab.click();
+    await page.waitForTimeout(800);
+    const shotFoundry = await page.screenshot();
+    saveShot(shotFoundry, 'antikythera_mk3_foundry_native_gears');
+  }
+
+  // 5. Switch to Venus (Aphrodite) and test Cloud-Pierce toggle
+  console.log('Testing Venus & Cloud-Pierce Toggle...');
+  const venusBtn = await page.$('button[data-planet="venus"]');
+  if (venusBtn) {
+    await venusBtn.click();
     await page.waitForTimeout(1000);
-    const shotPole = await page.screenshot();
-    saveShot(shotPole, 'antikythera_mk3_precession_pole');
+
+    const shotVenusOpaque = await page.screenshot();
+    saveShot(shotVenusOpaque, 'antikythera_mk3_planet_venus_cloud');
+
+    const cloudPierceBtn = await page.$('#btn-cloud-pierce');
+    if (cloudPierceBtn) {
+      await cloudPierceBtn.click();
+      await page.waitForTimeout(800);
+      const shotVenusPierced = await page.screenshot();
+      saveShot(shotVenusPierced, 'antikythera_mk3_planet_venus_pierced');
+    }
   }
 
-  // Return to Inset mode for tab audits
-  if (layoutSelect) {
-    await layoutSelect.selectOption('INSET');
-    await page.waitForTimeout(500);
+  // 6. Switch to Jupiter (Zeus)
+  console.log('Testing Jupiter & Galilean Satellites...');
+  const jupiterBtn = await page.$('button[data-planet="jupiter"]');
+  if (jupiterBtn) {
+    await jupiterBtn.click();
+    await page.waitForTimeout(1000);
+    const shotJupiter = await page.screenshot();
+    saveShot(shotJupiter, 'antikythera_mk3_planet_jupiter');
   }
 
-  // Screenshot 3: Compute Bay
-  console.log('Testing Compute Bay Tab...');
-  const computeTab = await page.$('button[data-tab="compute"]');
-  if (computeTab) {
-    await computeTab.click();
-    await page.waitForTimeout(800);
-    const runComputeBtn = await page.$('#btn-run-compute');
-    if (runComputeBtn) await runComputeBtn.click();
-    await page.waitForTimeout(500);
-    const shotCompute = await page.screenshot();
-    saveShot(shotCompute, 'antikythera_mk3_compute_bay');
+  // 7. Switch to Pluto (Plouton) - Dwarf Planet
+  console.log('Testing Pluto & Charon Tidal Locking...');
+  const plutoBtn = await page.$('button[data-planet="pluto"]');
+  if (plutoBtn) {
+    await plutoBtn.click();
+    await page.waitForTimeout(1000);
+    const shotPluto = await page.screenshot();
+    saveShot(shotPluto, 'antikythera_mk3_planet_pluto');
   }
 
-  // Screenshot 4: Bayesian Inverse Dating
-  console.log('Testing Inverse Dating Tab...');
-  const inverseTab = await page.$('button[data-tab="inverse"]');
-  if (inverseTab) {
-    await inverseTab.click();
-    await page.waitForTimeout(800);
-    const shotInverse = await page.screenshot();
-    saveShot(shotInverse, 'antikythera_mk3_bayesian_dating');
+  // 8. Return to Earth Baseline (Regression Check)
+  console.log('Returning to Earth (Gaia) Baseline...');
+  const earthBtn = await page.$('button[data-planet="earth"]');
+  if (earthBtn) {
+    await earthBtn.click();
+    await page.waitForTimeout(1000);
   }
 
-  // Screenshot 5: Ancient Reconciliation
-  console.log('Testing Reconciliation Tab...');
-  const recTab = await page.$('button[data-tab="reconciliation"]');
-  if (recTab) {
-    await recTab.click();
-    await page.waitForTimeout(800);
-    const shotRec = await page.screenshot();
-    saveShot(shotRec, 'antikythera_mk3_reconciliation');
-  }
-
-  // Screenshot 6: Life of Object
-  console.log('Testing Life of Object Tab...');
-  const lifeTab = await page.$('button[data-tab="life"]');
-  if (lifeTab) {
-    await lifeTab.click();
-    await page.waitForTimeout(800);
-    const shotLife = await page.screenshot();
-    saveShot(shotLife, 'antikythera_mk3_life_timeline');
-  }
-
-  // Test Time Engine step buttons
-  console.log('Testing Time Engine step buttons...');
-  const forwardYearBtn = await page.$('#btn-step-forward-year');
-  if (forwardYearBtn) {
-    await forwardYearBtn.click();
-    await page.waitForTimeout(300);
-  }
-
-  // Screenshot 7: Mobile 390x844 Viewport Audit
+  // 9. Mobile 390x844 Responsive Viewport Audit
   console.log('Performing Mobile 390x844 responsive audit...');
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(1200);
   const shotMobile = await page.screenshot();
   saveShot(shotMobile, 'antikythera_mk3_mobile_390x844');
 

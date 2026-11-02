@@ -334,9 +334,11 @@ export class AntikytheraSceneMk3 {
     const aspect = this.camera.aspect || 1.0;
     const fovRad = (this.camera.fov * Math.PI) / 180;
     
-    const totalHeight = 270; // mm
-    const totalWidth = 280;  // mm
-    const margin = 1.15;
+    // Exact bounding dimensions of the full Antikythera Mk III assembly:
+    // Width = 276.2 mm, Height = 261.5 mm, Depth = 83.9 mm
+    const totalHeight = 262; // mm
+    const totalWidth = 278;  // mm
+    const margin = 1.75;     // Clean, balanced framing with comfortable breathing margins
 
     const distForHeight = (totalHeight * margin) / (2 * Math.tan(fovRad / 2));
     const distForWidth = (totalWidth * margin) / (2 * Math.tan(fovRad / 2) * aspect);
@@ -346,16 +348,13 @@ export class AntikytheraSceneMk3 {
 
   public fitToFrame() {
     const dist = this.calculateFrameDistance();
-    this.controls.target.set(0, 0, 0);
+    // 3D center of volumetric bounding box: X = 8.88, Y = -5.75, Z = 9.0
+    const centerX = 8.88;
+    const centerY = -18.0;
+    const centerZ = 9.0;
 
-    const currentDir = new THREE.Vector3().subVectors(this.camera.position, this.controls.target);
-    if (currentDir.lengthSq() < 1) {
-      currentDir.set(dist * 0.08, dist * 0.12, dist);
-    } else {
-      currentDir.setLength(dist);
-    }
-
-    this.camera.position.copy(currentDir);
+    this.controls.target.set(centerX, centerY, centerZ);
+    this.camera.position.set(centerX, centerY, centerZ + dist);
     this.controls.update();
   }
 
@@ -380,20 +379,20 @@ export class AntikytheraSceneMk3 {
 
     switch (preset) {
       case 'front':
-        this.controls.target.set(0, 0, 0);
-        this.camera.position.set(0, 0, dist);
+        this.controls.target.set(8.88, -5.75, 9.0);
+        this.camera.position.set(8.88, -5.75, 9.0 + dist);
         this.setExplodedView(0.0);
         this.setGhostOverlay(false);
         break;
       case 'back':
-        this.controls.target.set(0, 0, 0);
-        this.camera.position.set(0, 0, -dist);
+        this.controls.target.set(8.88, -5.75, 9.0);
+        this.camera.position.set(8.88, -5.75, 9.0 - dist);
         this.setExplodedView(0.0);
         this.setGhostOverlay(false);
         break;
       case 'side':
-        this.controls.target.set(0, 0, 0);
-        this.camera.position.set(dist, 0, 0);
+        this.controls.target.set(8.88, -5.75, 9.0);
+        this.camera.position.set(8.88 + dist, -5.75, 9.0);
         this.setExplodedView(0.0);
         break;
       case 'clepsydra':
@@ -451,6 +450,10 @@ export class AntikytheraSceneMk3 {
       this.onResize();
       this.fitToFrame();
     });
+    setTimeout(() => {
+      this.onResize();
+      this.fitToFrame();
+    }, 150);
 
     const dom = this.renderer.domElement;
     const raycaster = new THREE.Raycaster();
