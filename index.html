@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Antikythera Mk III: The Engine</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-slate-950 text-slate-100 m-0 p-0 overflow-hidden font-sans select-none">
+    <div id="app" class="w-screen h-screen flex flex-col lg:flex-row overflow-hidden">
+      <!-- 3D DISPLAY AREA (MECHANISM & STANDING SKY WINDOW) -->
+      <main id="canvas-container" class="relative flex-1 h-[50vh] lg:h-full bg-slate-950 overflow-hidden flex">
+        <div id="viewport-mechanism" class="absolute inset-0 w-full h-full"></div>
+        <div id="viewport-sky" class="absolute top-4 right-4 w-80 h-80 rounded-xl overflow-hidden border-2 border-slate-700 shadow-2xl z-20"></div>
+      </main>
+
+      <!-- INTERACTIVE CONTROL DASHBOARD -->
+      <aside id="dashboard-container" class="w-full lg:w-[500px] xl:w-[560px] h-[50vh] lg:h-full bg-slate-900 border-t lg:border-t-0 lg:border-l border-slate-800 flex flex-col shrink-0 overflow-hidden shadow-2xl z-30">
+      </aside>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
