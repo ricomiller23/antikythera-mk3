@@ -908,6 +908,24 @@ export class AntikytheraDashboardMk3 {
       });
     });
 
+
+    // Sky Pip Toggle Button
+    const pipBtn = document.getElementById('btn-toggle-sky-pip');
+    const skyPipEl = document.getElementById('viewport-sky');
+    if (pipBtn && skyPipEl) {
+      pipBtn.addEventListener('click', () => {
+        if (skyPipEl.style.display === 'none') {
+          skyPipEl.style.display = 'block';
+          pipBtn.textContent = 'Hide Pip';
+          pipBtn.className = 'px-2 h-8 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono active:scale-95 transition-transform';
+        } else {
+          skyPipEl.style.display = 'none';
+          pipBtn.textContent = '+ Sky Pip';
+          pipBtn.className = 'px-2 h-8 flex items-center justify-center rounded bg-indigo-900/80 hover:bg-indigo-800 text-indigo-300 text-xs font-mono active:scale-95 transition-transform font-bold';
+        }
+      });
+    }
+
     // Life of Object Listeners
     document.querySelectorAll('.btn-era-select').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -989,7 +1007,7 @@ export class AntikytheraDashboardMk3 {
 
     if (this.layoutMode === 'INSET') {
       viewportMech.className = 'absolute inset-0 w-full h-full';
-      viewportSky.className = 'absolute top-4 right-4 w-80 h-80 rounded-xl overflow-hidden border-2 border-slate-700 shadow-2xl z-20';
+      viewportSky.className = 'absolute bottom-4 right-4 w-60 h-60 rounded-xl overflow-hidden border-2 border-slate-700 shadow-2xl z-20 transition-all duration-300';
       viewportMech.style.display = 'block';
       viewportSky.style.display = 'block';
     } else if (this.layoutMode === 'SPLIT') {
